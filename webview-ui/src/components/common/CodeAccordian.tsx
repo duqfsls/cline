@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronRightIcon } from "lucide-react"
+import { ChevronDownIcon, ChevronRightIcon, Loader2 } from "lucide-react"
 import { memo, useMemo } from "react"
 import CodeBlock from "@/components/common/CodeBlock"
 import { cn } from "@/lib/utils"
@@ -68,6 +68,28 @@ const CodeAccordian = ({
 					}}
 					tabIndex={0}
 					variant="text">
+					{isLoading !== undefined && (
+						<span className="mr-2 flex items-center">
+							{isLoading ? (
+								<span title="Editing...">
+									<Loader2 className="w-4 h-4 text-info animate-spin shrink-0" />
+								</span>
+							) : (
+								<svg
+									className="w-4 h-4 text-success shrink-0"
+									fill="none"
+									stroke="currentColor"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth="2"
+									viewBox="0 0 24 24">
+									<title>Edit completed</title>
+									<path d="M21.801 10A10 10 0 1 1 17 3.335" />
+									<path d="m9 11 3 3L22 4" />
+								</svg>
+							)}
+						</span>
+					)}
 					{isFeedback || isConsoleLogs ? (
 						<div className="flex items-center">
 							<span className={`mr-1.5 codicon codicon-${isFeedback ? "feedback" : "output"}`} />
@@ -76,13 +98,16 @@ const CodeAccordian = ({
 							</span>
 						</div>
 					) : (
-						<span className="whitespace-nowrap overflow-hidden text-ellipsis mr-2 [direction: rtl] text-left">
-							{path?.startsWith(".") && <span>.</span>}
-							{path && !path.startsWith(".") && <span>/</span>}
-							{cleanPathPrefix(path ?? "") + "\u200E"}
-						</span>
+						<>
+							<span className="whitespace-nowrap overflow-hidden text-ellipsis mr-2 [direction: rtl] text-left">
+								{path?.startsWith(".") && <span>.</span>}
+								{path && !path.startsWith(".") && <span>/</span>}
+								{cleanPathPrefix(path ?? "") + "\u200E"}
+							</span>
+						</>
 					)}
 					<div className="grow" />
+
 					{numberOfEdits !== undefined && (
 						<div className="flex items-center mr-2 text-description">
 							<span className="codicon codicon-diff-single mr-1" />

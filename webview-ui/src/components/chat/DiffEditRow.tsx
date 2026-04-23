@@ -1,5 +1,5 @@
 import { StringRequest } from "@shared/proto/cline/common"
-import { FilePlus, FileText, FileX, SquareArrowOutUpRightIcon } from "lucide-react"
+import { FilePlus, FileText, FileX, Loader2, SquareArrowOutUpRightIcon } from "lucide-react"
 import { memo, useEffect, useMemo, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
 import { FileServiceClient } from "@/services/grpc-client"
@@ -142,9 +142,27 @@ const FileBlock = memo<{ file: Patch; isStreaming: boolean; startLineNumber?: nu
 					className="w-full flex items-center gap-2 p-2 bg-code transition-colors justify-between cursor-pointer"
 					onClick={() => setIsExpanded((prev) => !prev)}
 					type="button">
+					{isStreaming ? (
+						<span title="Editing...">
+							<Loader2 className="w-4 h-4 text-info animate-spin shrink-0" />
+						</span>
+					) : (
+						<svg
+							className="w-4 h-4 text-success shrink-0"
+							fill="none"
+							stroke="currentColor"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth="2"
+							viewBox="0 0 24 24">
+							<title>Edit completed</title>
+							<path d="M21.801 10A10 10 0 1 1 17 3.335" />
+							<path d="m9 11 3 3L22 4" />
+						</svg>
+					)}
 					<div className="flex items-center gap-3 flex-1 w-full overflow-hidden">
 						<div className={cn("flex items-center gap-2 w-full", actionStyle.borderClass)}>
-							<ActionIcon className={cn("w-5 h-5", actionStyle.iconClass)} />
+							{/* <ActionIcon className={cn("w-4 h-4", actionStyle.iconClass)} /> */}
 							<span
 								className="font-medium truncate hover:underline hover:text-link"
 								onClick={handleOpenFile}
@@ -153,6 +171,7 @@ const FileBlock = memo<{ file: Patch; isStreaming: boolean; startLineNumber?: nu
 							</span>
 						</div>
 					</div>
+
 					<div className="flex items-center gap-2">
 						<DiffStats additions={file.additions} deletions={file.deletions} />
 						<span
@@ -313,11 +332,11 @@ function parsePatch(patch: string, path: string): ParseResult {
 					deletions: 0,
 				},
 			],
-			isStreaming: true,
+			isStreaming: false,
 		}
 	}
 
-	return { parsedFiles: [], isStreaming: true }
+	return { parsedFiles: [], isStreaming: false }
 }
 
 /**

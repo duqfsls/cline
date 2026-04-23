@@ -444,9 +444,9 @@ export const ChatRowContent = memo(
 								/>
 							) : (
 								<CodeAccordian
-									// isLoading={message.partial}
 									code={tool.content}
 									isExpanded={isExpanded}
+									isLoading={message.partial}
 									onToggleExpand={handleToggle}
 									path={tool.path!}
 								/>
@@ -463,9 +463,9 @@ export const ChatRowContent = memo(
 								<span style={{ fontWeight: "bold" }}>Cline wants to delete this file:</span>
 							</div>
 							<CodeAccordian
-								// isLoading={message.partial}
 								code={tool.content}
 								isExpanded={isExpanded}
+								isLoading={message.partial}
 								onToggleExpand={handleToggle}
 								path={tool.path!}
 							/>
@@ -481,7 +481,12 @@ export const ChatRowContent = memo(
 								<span className="font-bold">Cline wants to create a new file:</span>
 							</div>
 							{backgroundEditEnabled && tool.path && tool.content ? (
-								<DiffEditRow patch={tool.content} path={tool.path} startLineNumbers={tool.startLineNumbers} />
+								<DiffEditRow
+									isLoading={message.partial}
+									patch={tool.content}
+									path={tool.path}
+									startLineNumbers={tool.startLineNumbers}
+								/>
 							) : (
 								<CodeAccordian
 									code={tool.content!}
